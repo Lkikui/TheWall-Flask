@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<head>
+  <title>The Wall</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='wall.css') }}">
+</head>
+
+<body>
+    <div id = "wrapper"> <!-- wrapper begins -->
+        <!-- header -->
+        <div id = "header">
+            <h1>The Wall</h1>
+            <h3>Welcome, {{ session['login_firstnm'] }}</h3>
+            <a href="/">log out</a>
+        </div>
+
+        <!-- main content -->
+        <div id = "main_content">
+            <form action='/message' method='POST' class="message_form">
+                <label for="message"><h2>Post a message</h2><input type="text" name="message"></label>
+                <button>Post a message</button>
+            </form>
+            {% for message in all_messages %}
+                <div id="messages">
+                    <p class="author">{{message["full_name"]}} - {{message["day"]}}</p>
+                    <p class="text">{{message["message"]}}</p>
+                </div>
+                {% for comment in all_comments%}
+                    {% if comment["message_id"] == message["id"] %}
+                    <div id="comments">
+                        <p class="author">{{comment["full_name"]}} - {{comment["day"]}}</p>
+                        <p class="text">{{comment["comment"]}} </p>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                <form action= "/comment/{{message['id']}}" method='POST'class="comment_form"> 
+                    <label for="comment">Post a comment<input type="text" name="comment" id="comment"></label>
+                    <button>Post a comment</button>
+                </form>
+            {% endfor %}
+        </div>
+
+    </div> <!-- wrapper ends -->
+</body>
